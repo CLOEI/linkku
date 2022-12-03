@@ -36,7 +36,7 @@ function Join() {
     }
   }
 
-  const memoizeOnChange = useMemo(() => debounce(onChange), [debounce, onChange])
+  const memoizeOnChange = useMemo(() => debounce(onChange), [])
 
   return (
     <div>
