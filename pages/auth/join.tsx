@@ -15,28 +15,30 @@ function Join() {
     return docSnap.exists()
   }
 
-  const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length > 0) {
-      const res = await checkExist(e.target.value)
-      if (res) {
-        setError(`Username ${e.target.value} tidak tersedia.`)
+  const memoizeOnChange = useMemo(() => {
+    const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.value.length > 0) {
+        const res = await checkExist(e.target.value)
+        if (res) {
+          setError(`Username ${e.target.value} tidak tersedia.`)
+        }
+      } else {
+        setError('')
       }
-    } else {
-      setError('')
+      setUsername(e.target.value)
     }
-    setUsername(e.target.value)
-  }
-
-  const debounce = (func : typeof onChange) => {
-    let timerId : NodeJS.Timeout
-
-    return (arg: React.ChangeEvent<HTMLInputElement>) => {
-      clearTimeout(timerId)
-      timerId = setTimeout(() => func(arg), 300)
+  
+    const debounce = (func : typeof onChange) => {
+      let timerId : NodeJS.Timeout
+  
+      return (arg: React.ChangeEvent<HTMLInputElement>) => {
+        clearTimeout(timerId)
+        timerId = setTimeout(() => func(arg), 300)
+      }
     }
-  }
 
-  const memoizeOnChange = useMemo(() => debounce(onChange), [])
+    return debounce(onChange)
+  }, [])
 
   return (
     <div>
