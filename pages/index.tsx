@@ -1,7 +1,14 @@
-import { Button, Center, Heading, Text, VStack } from '@chakra-ui/react'
+import { Button, Center, Heading, HStack, Text, VStack } from '@chakra-ui/react'
 import Head from 'next/head'
 
+import { useRouter } from 'next/router'
+
 export default function Home() {
+  const router = useRouter()
+
+  const joinButton = () => router.push("/auth/join")
+  const loginButton = () => router.push("/auth/login")
+
   return (
     <div>
       <Head>
@@ -10,8 +17,11 @@ export default function Home() {
       <Center h="100vh">
         <VStack spacing={4}>
           <Heading as="h1" size="4xl">Linkku</Heading>
-          <Text>Buat halaman dengan personalisasimu dengan mudah</Text>
-          <Button>Mulai Secara Gratis</Button>
+          <Text>Buat halaman terpersonalisasimu dengan mudah</Text>
+          <HStack>
+            <Button colorScheme="blue" onClick={joinButton}>Mulai Secara Gratis</Button>
+            <Button variant="outline" onClick={loginButton}>Login</Button>
+          </HStack>
         </VStack>
       </Center>
     </div>
