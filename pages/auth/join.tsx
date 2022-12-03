@@ -18,7 +18,6 @@ function Join() {
   const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length > 0) {
       const res = await checkExist(e.target.value)
-      console.log("woe")
       if (res) {
         setError(`Username ${e.target.value} tidak tersedia.`)
       }
@@ -37,10 +36,7 @@ function Join() {
     }
   }
 
-  const memoizeOnChange = useMemo(() => debounce(onChange), [])
-
-  console.log(username.length)
-
+  const memoizeOnChange = useMemo(() => debounce(onChange), [debounce, onChange])
 
   return (
     <div>
