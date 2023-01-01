@@ -1,9 +1,13 @@
 import { Button, Center, Heading, HStack, Text, VStack } from '@chakra-ui/react'
+import { useSession } from 'next-auth/react'
 import Head from 'next/head'
 
 import getDomain from '../utils/getDomain'
 
 export default function Home() {
+  const { data, status } = useSession()
+
+  console.log(data)
   return (
     <div>
       <Head>
