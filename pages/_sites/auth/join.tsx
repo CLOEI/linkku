@@ -1,10 +1,11 @@
-import { Box, Button, Center, Heading, Input, InputGroup, InputLeftAddon, Text, VStack } from '@chakra-ui/react'
+import { Box, Button, Center, Heading, Input, InputGroup, InputLeftAddon, Text, VStack, Link } from '@chakra-ui/react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { doc, getDoc } from 'firebase/firestore'
-import { db } from "../../firebase"
-import { useAuth } from '../../hooks/useAuth'
+import { db } from "../../../firebase"
+import { useAuth } from '../../../hooks/useAuth'
+import getDomain from '../../../utils/getDomain'
 
 function Join() {
   const [username, setUsername] = useState("")
@@ -75,7 +76,7 @@ function Join() {
               {err && <Text color="red">{err}</Text>}
             </Box>
             <Button size="lg" disabled={!(username.length > 0) || !!err} isLoading={loading} onClick={handleNext}>Lanjut</Button>
-            <Text align="center">Sudah punya akun? <Text as="span" decoration="underline" _hover={{ cursor: "pointer" }} onClick={() => router.push("/auth/login")}>Sign in</Text></Text>
+            <Text align="center">Sudah punya akun? <Link href={`http://auth.${getDomain()}/login`}>Sign in</Link></Text>
           </VStack>
       </Center>
     )}
