@@ -7,12 +7,13 @@ import { db } from "../../../firebase"
 import { useAuth } from '../../../hooks/useAuth'
 import getDomain from '../../../utils/getDomain'
 
+import { signIn } from "next-auth/react"
+
 function Join() {
   const [username, setUsername] = useState("")
   const [err, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const auth = useAuth()
   const router = useRouter()
 
   const checkExist = async (name: string) => {
@@ -25,7 +26,7 @@ function Join() {
   }
 
   const handleNext = () => {
-    router.push("?usernameSubmitted=true")
+    router.push("/join?usernameSubmitted=true")
   }
 
   const memoizeOnChange = useMemo(() => {
@@ -59,7 +60,7 @@ function Join() {
       </Head>
       {router.query?.usernameSubmitted && username ? (
         <Center height="100vh">
-          <Button size="lg" onClick={auth?.signInWithGoogle}>Lanjut dengan Google</Button>
+          <Button size="lg" onClick={() => signIn("google")}>Lanjut dengan Google</Button>
         </Center>
       ) : (
         <Center height="100vh">

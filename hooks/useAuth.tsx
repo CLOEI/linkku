@@ -1,5 +1,5 @@
 import { auth, googleAuthProvider } from "../firebase";
-import { signInWithPopup, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { signInWithRedirect, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, getRedirectResult } from "firebase/auth";
 import { useEffect, useState, createContext, useContext } from "react"
 
 import type { User } from "firebase/auth"
@@ -20,12 +20,13 @@ export const useAuth = () => {
 function useProvideAuth() {
   const [user, setUser] = useState<null|User|false>(null)
 
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, googleAuthProvider)
-      .then((res) => {
-        setUser(res.user)
-        return res.user
-      })
+  const signInWithGoogle = async () => {
+    await signInWithRedirect(auth, googleAuthProvider)
+    await getRedirectResult(auth)
+    .then((res) => {
+      setUser(res?.user || null)
+      return res?.user
+    })
   }
 
   const signInWithEmail = (email: string, password: string) => {

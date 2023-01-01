@@ -5,7 +5,7 @@ import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDm0jZqvyzyqE2aFE8FZhVJed76omlGs04",
-  authDomain: "auth.linkku.cc",
+  authDomain: "linkku-53a6e.firebaseapp.com",
   projectId: "linkku-53a6e",
   storageBucket: "linkku-53a6e.appspot.com",
   messagingSenderId: "512379284067",
