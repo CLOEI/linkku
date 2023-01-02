@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { doc, getDoc } from 'firebase/firestore'
 import { db } from "../../../firebase"
-import { useAuth } from '../../../hooks/useAuth'
 import getDomain from '../../../utils/getDomain'
 
 import { signIn } from "next-auth/react"
