@@ -4,20 +4,17 @@ import { getFirestore } from "firebase/firestore";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDm0jZqvyzyqE2aFE8FZhVJed76omlGs04",
-  authDomain: "linkku-53a6e.firebaseapp.com",
-  projectId: "linkku-53a6e",
-  storageBucket: "linkku-53a6e.appspot.com",
-  messagingSenderId: "512379284067",
-  appId: "1:512379284067:web:88a6f37d7dd387f79e2656",
-  measurementId: "G-T8JPH7C7DV"
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig)
 
-const auth = getAuth(app)
 const db = getFirestore(app)
 
-const googleAuthProvider = new GoogleAuthProvider()
-
-export { auth, db, googleAuthProvider }
+export { db, firebaseConfig }

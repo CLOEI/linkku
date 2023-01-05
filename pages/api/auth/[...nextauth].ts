@@ -1,7 +1,9 @@
+import { FirestoreAdapter } from "@next-auth/firebase-adapter";
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google";
+import { firebaseConfig } from "../../../firebase";
 
-const useSecureCookies = process.env.NEXTAUTH_URL!.startsWith('https://');
+const useSecureCookies = process.env.NEXTAUTH_URL?.startsWith('https://');
 const cookiePrefix = useSecureCookies ? '__Secure-' : '';
 
 export default NextAuth({
@@ -24,6 +26,7 @@ export default NextAuth({
       }
     }
   },
+  adapter: FirestoreAdapter(firebaseConfig),
   pages: {
     signIn: "/login",
     newUser: "/join"
