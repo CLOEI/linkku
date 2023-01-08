@@ -20,7 +20,7 @@ export default function Home() {
         </HStack>
       </Center>
       <Center my="32">
-        <Grid templateRows={["repeat(1, 1fr)", "repeat(2, 1fr)"]} templateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)"]} gap={4} maxW="3xl" px={{ base: "4" }}>
+        <Grid templateRows={["repeat(1, 1fr)", "repeat(2, 1fr)"]} templateColumns={["repeat(1, 1fr)", "repeat(2, 1fr)"]} gap={4} maxW="3xl" px={{ base: "4" }} alignItems="center">
           <GridItem rowSpan={2}>
             <Card>
               <CardHeader>
