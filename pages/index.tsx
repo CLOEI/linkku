@@ -1,21 +1,10 @@
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Card, CardBody, CardHeader, Center, Grid, GridItem, Heading, HStack, Text, Icon } from '@chakra-ui/react'
 import { BsCash, BsFillEmojiHeartEyesFill, BsFillLightningChargeFill } from "react-icons/bs"
 import Head from 'next/head'
-import { useEffect, useRef } from 'react'
-import { useInView, motion, useAnimationControls } from 'framer-motion'
+import { motion, useAnimationControls } from 'framer-motion'
 
 export default function Home() {
-  const ref = useRef(null)
-  const isInView = useInView(ref)
   const controls = useAnimationControls()
-
-  useEffect(() => {
-    if (isInView) {
-      controls.start("hidden")
-    } else {
-      controls.start("show")
-    }
-  }, [isInView, controls])
 
   return (
     <>
@@ -28,7 +17,13 @@ export default function Home() {
       <Center minH="100vh" flexDir="column">
         <Heading as="h1" size="4xl">Linkku</Heading>
         <Text my="4">Buat halaman terpersonalisasimu dengan mudah</Text>
-        <HStack spacing="2" ref={ref}>
+        {
+          /**
+           * Use onViewportEnter and onViewportLeave callback because
+           * if we use useInView hook it gonna start with false (im sure you dont want this)
+           */
+        }
+        <HStack as={motion.div} spacing="2" onViewportEnter={() => controls.start("hidden")} onViewportLeave={() => controls.start("show")}>
           <Button as="a" colorScheme="blue" href={process.env.NEXTAUTH_URL! + "/signup"}>Mulai Secara Gratis</Button>
           <Button as="a" variant="outline" href={process.env.NEXTAUTH_URL! + "/signin"}>Masuk</Button>
         </HStack>
@@ -110,7 +105,7 @@ export default function Home() {
       <Center my="10">
         <Text fontWeight="bold">Dibuat dengan 💖 oleh Cendy</Text>
       </Center>
-      <HStack as={motion.div} variants={navVariant} initial="hidden" animate={controls} justifyContent="space-between" px="6" pos="fixed" inset="0" h="max-content" borderBottom="1px" borderColor="gray.200" bg="white">
+      <HStack as={motion.div} variants={navVariant} initial="initial" animate={controls} justifyContent="space-between" px="6" pos="fixed" inset="0" h="max-content" borderBottom="1px" borderColor="gray.200" bg="white">
         <Text fontWeight="bold" fontSize="3xl">Linkku</Text>
         <HStack spacing="2">
           <Button as="a" size={["xs", "sm"]} colorScheme="blue" href={process.env.NEXTAUTH_URL! + "/signup"}>Mulai Secara Gratis</Button>
@@ -122,11 +117,15 @@ export default function Home() {
 }
 
 const navVariant = {
+  initial : {
+    display: "none"
+  },
   hidden : {
-    translateY : "-100%"
+    translateY : "-100%",
   },
   show : {
-    translateY : 0
+    display: "flex",
+    translateY : 0,
   }
 }
 
