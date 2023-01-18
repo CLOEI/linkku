@@ -3,9 +3,14 @@ import Head from 'next/head'
 import React from 'react'
 import AuthForm from '../../../components/AuthForm'
 
+type FormItem = {
+  username: string,
+  password: string,
+}
+
 function Signin() {
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const onSubmit = (obj : FormItem) => {
+    
   }
 
   return (
