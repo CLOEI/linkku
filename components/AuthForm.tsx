@@ -1,4 +1,5 @@
-import { Box, Button, Divider, FormControl, FormLabel, HStack, Input, Text } from '@chakra-ui/react';
+import { Box, Button, Divider, FormControl, FormErrorMessage, FormLabel, HStack, Input, Text } from '@chakra-ui/react';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { signIn } from 'next-auth/react';
 import React, { useState } from 'react';
 
@@ -8,36 +9,45 @@ type FormItem = {
 }
 
 type Props = {
-	onSubmit: (obj : FormItem) => void;
-	children: React.ReactNode;
+	onSubmit: (obj : FormItem ) => void;
+	children: ({ isSubmitting }: { isSubmitting: boolean }) => React.ReactNode;
 };
 
 function AuthForm({ onSubmit, children }: Props) {
-  const [formState, setFormState] = useState<FormItem>({} as FormItem)
-
-  const handleChange = (e : React.ChangeEvent<HTMLFormElement>) => {
-    setFormState({
-      ...formState,
-      [e.target.name] : e.target.value
-    })
-  }
-
 	return (
 		<Box>
-			<form onSubmit={(e) => {
-        e.preventDefault()
-        onSubmit(formState)
-      }} onChange={handleChange}>
-				<FormControl isRequired>
-					<FormLabel>Username</FormLabel>
-					<Input type="text" name="username"/>
-				</FormControl>
-				<FormControl isRequired>
-					<FormLabel>Password</FormLabel>
-					<Input type="password" name="password"/>
-				</FormControl>
-				{children}
-			</form>
+      <Formik initialValues={{ username: "", password: "" }} validate={values => {
+        const errors: {
+          username?: string,
+          password?: string,
+        } = {}
+        
+        if (/[!@#$%^&*(),.?":{}|<>]/g.test(values.username)) {
+          errors.username = "Karakter spesial tidak diperbolehkan."
+        } else if (values.username.length < 4) {
+          errors.username = "Minimal panjang karakter 5."
+        }
+
+        return errors;
+      }} onSubmit={(values) => {
+        onSubmit(values)
+      }}>
+        {({ isSubmitting, errors, touched }) => (
+          <Form>
+            <FormControl isRequired isInvalid={!!errors.username && touched.username}>
+              <FormLabel htmlFor='username'>Username</FormLabel>
+              <Field as={Input} type="text" name="username"/>
+              <FormErrorMessage fontSize="xs">{errors.username}</FormErrorMessage>
+            </FormControl>
+            <FormControl isRequired isInvalid={!!errors.password && touched.username}>
+					    <FormLabel htmlFor='password'>Password</FormLabel>
+              <Field as={Input} type="password" name="password"/>
+              <FormErrorMessage fontSize="xs">{errors.password}</FormErrorMessage>
+            </FormControl>
+            {children({isSubmitting})}
+          </Form>
+        )}
+      </Formik>
 			<HStack my="2">
 				<Divider />
 				<Text fontSize="xs">ATAU</Text>

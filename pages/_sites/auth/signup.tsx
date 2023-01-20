@@ -1,6 +1,7 @@
-import { Button, Center, Text, Link } from '@chakra-ui/react'
+import { Button, Center, Text, Link, useToast } from '@chakra-ui/react'
+import { signIn } from 'next-auth/react'
 import Head from 'next/head'
-import React, { useRef } from 'react'
+import React from 'react'
 import AuthForm from '../../../components/AuthForm'
 
 type FormItem = {
@@ -9,16 +10,28 @@ type FormItem = {
 }
 
 function Signup() {
-  const buttonRef = useRef<HTMLButtonElement>(null)
+  const toast = useToast()
+
   const onSubmit = async (obj : FormItem) => {
-    buttonRef.current!.disabled = true
     const req = await fetch("/api/signup", {
       method: "POST",
       body: JSON.stringify(obj)
     })
 
    if (req.status === 200) {
-    window.location.href = process.env.NEXT_PUBLIC_APP_URL!
+    toast({
+      position: "bottom-right",
+      title: "Akun dibuat.",
+      description: "Akun kamu telah berhasil di buat!",
+      isClosable: true,
+      duration: 3000,
+      status: "success",
+    })
+    signIn("credentials", {
+      username: obj.username,
+      password: obj.password,
+      callbackUrl: process.env.NEXT_PUBLIC_APP_URL!
+    })
    }
   }
 
@@ -29,8 +42,12 @@ function Signup() {
       </Head>
       <Center minH="100vh">
         <AuthForm onSubmit={onSubmit}>
-          <Button ref={buttonRef} type="submit" display="block" ml="auto" my="2">Gabung</Button>
-          <Text textAlign="center" fontSize="sm" my="4">Sudah punya akun? <Link href={process.env.NEXTAUTH_URL + "/signin"} color="teal">masuk</Link></Text>
+          {({ isSubmitting }: { isSubmitting: boolean }) => (
+            <>
+              <Button type="submit" display="block" ml="auto" my="2" disabled={isSubmitting}>Gabung</Button>
+              <Text textAlign="center" fontSize="sm" my="4">Sudah punya akun? <Link href={process.env.NEXTAUTH_URL + "/signin"} color="teal">masuk</Link></Text>
+            </>
+          )}
         </AuthForm>
       </Center>
     </>
