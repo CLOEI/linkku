@@ -14,7 +14,7 @@ function Signin() {
     signIn("credentials", {
       username: obj.username,
       password: obj.password,
-      callbackUrl: process.env.NEXT_PUBLIC_APP_URL!
+      // callbackUrl: process.env.NEXT_PUBLIC_APP_URL!
     })
   }
 

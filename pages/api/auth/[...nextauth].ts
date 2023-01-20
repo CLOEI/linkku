@@ -7,7 +7,11 @@ import bcrypt from "bcrypt"
 
 import type { AuthOptions } from "next-auth"
 
+const useSecureCookies = process.env.NEXTAUTH_URL?.startsWith('https://');
+const cookiePrefix = useSecureCookies ? '__Secure-' : '';
+
 export const authOptions: AuthOptions = {
+  debug: true,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID!,
@@ -37,10 +41,24 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+  cookies: {
+    sessionToken: {
+      name: `${cookiePrefix}next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: 'lax',
+        path: '/',
+        secure: useSecureCookies,
+        domain: process.env.NODE_ENV == "development" ? ".localhost" : ".linkku.cc"
+      }
+    }
+  },
   callbacks: {
     async redirect({ url }) {
       return url;
     }
   }
 }
+
+console.log("." + process.env.NEXTAUTH_URL!.split(".").slice(1).join("."))
 export default NextAuth(authOptions)
