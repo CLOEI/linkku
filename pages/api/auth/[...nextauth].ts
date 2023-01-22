@@ -22,14 +22,13 @@ export const authOptions: AuthOptions = {
         username: { label: "Username", type: "text", placeholder: "johndoe" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const authRef = collection(db, "auth");
         const q = query(authRef, where("username", "==", credentials?.username))
         const querySnapshot = await getDocs(q)
         const data = querySnapshot.docs[0].data()
 
         const check = await bcrypt.compare(credentials!.password, data.password)
-        console.log(data.id, data.username)
 
         if (check) {
           return {
@@ -49,7 +48,7 @@ export const authOptions: AuthOptions = {
         sameSite: 'lax',
         path: '/',
         secure: useSecureCookies,
-        domain: process.env.NODE_ENV == "development" ? ".localhost" : ".linkku.cc"
+        domain: "." + process.env.NEXTAUTH_URL!.split(".").slice(1).join(".").split(":")[0]
       }
     }
   },
@@ -60,5 +59,4 @@ export const authOptions: AuthOptions = {
   }
 }
 
-console.log("." + process.env.NEXTAUTH_URL!.split(".").slice(1).join("."))
 export default NextAuth(authOptions)

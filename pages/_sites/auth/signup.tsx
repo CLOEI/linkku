@@ -1,7 +1,7 @@
 import { Button, Center, Text, Link, useToast } from '@chakra-ui/react'
-import { signIn } from 'next-auth/react'
+import { signIn, useSession } from 'next-auth/react'
 import Head from 'next/head'
-import React from 'react'
+import React, { useEffect } from 'react'
 import AuthForm from '../../../components/AuthForm'
 
 type FormItem = {
@@ -11,6 +11,17 @@ type FormItem = {
 
 function Signup() {
   const toast = useToast()
+  const { status } = useSession()
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      window.location.href = `${process.env.NEXT_PUBLIC_APP_URL}`
+    }
+  }, [status])
+
+  if (status === "loading" || status === "authenticated") {
+    return null
+  }
 
   const onSubmit = async (obj : FormItem) => {
     const req = await fetch("/api/signup", {
