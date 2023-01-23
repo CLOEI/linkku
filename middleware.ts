@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from 'next/server'
+import { withAuth } from "next-auth/middleware"
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const host = request.headers.get("host")
   const sub = host?.split(".")[0]
-
 
   /**
    * In development, i use localtest.me and i had no idea why there's a request from localhost

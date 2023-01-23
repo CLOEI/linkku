@@ -1,7 +1,6 @@
 import { Box, Button, Divider, FormControl, FormErrorMessage, FormLabel, HStack, Input, Text } from '@chakra-ui/react';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { signIn } from 'next-auth/react';
-import React, { useState } from 'react';
 
 type FormItem = {
   username: string,

@@ -1,8 +1,10 @@
 import { Button, Center, Text, Link, useToast } from '@chakra-ui/react'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import Head from 'next/head'
-import React, { useEffect } from 'react'
 import AuthForm from '../../../components/AuthForm'
+import { authOptions } from '../../api/auth/[...nextauth]'
+import type { GetServerSideProps } from 'next'
+import { unstable_getServerSession } from 'next-auth'
 
 type FormItem = {
   username: string,
@@ -11,17 +13,6 @@ type FormItem = {
 
 function Signup() {
   const toast = useToast()
-  const { status } = useSession()
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      window.location.href = `${process.env.NEXT_PUBLIC_APP_URL}`
-    }
-  }, [status])
-
-  if (status === "loading" || status === "authenticated") {
-    return null
-  }
 
   const onSubmit = async (obj : FormItem) => {
     const req = await fetch("/api/signup", {
@@ -56,13 +47,31 @@ function Signup() {
           {({ isSubmitting }: { isSubmitting: boolean }) => (
             <>
               <Button type="submit" display="block" ml="auto" my="2" disabled={isSubmitting}>Gabung</Button>
-              <Text textAlign="center" fontSize="sm" my="4">Sudah punya akun? <Link href={process.env.NEXTAUTH_URL + "/signin"} color="teal">masuk</Link></Text>
+              <Text textAlign="center" fontSize="sm" my="4">Sudah punya akun? <Link href="/signin" color="teal">masuk</Link></Text>
             </>
           )}
         </AuthForm>
       </Center>
     </>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await unstable_getServerSession(ctx.req, ctx.res, authOptions);
+  
+  if (session) {
+    return {
+      props: {},
+      redirect: {
+        destination: process.env.NEXT_PUBLIC_APP_URL,
+        permanent: false,
+      }
+    }
+  }
+
+  return {
+    props : {}
+  }
 }
 
 export default Signup
