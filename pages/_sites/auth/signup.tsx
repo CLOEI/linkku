@@ -2,9 +2,6 @@ import { Button, Center, Text, Link, useToast } from '@chakra-ui/react'
 import { signIn } from 'next-auth/react'
 import Head from 'next/head'
 import AuthForm from '../../../components/AuthForm'
-import { authOptions } from '../../api/auth/[...nextauth]'
-import type { GetServerSideProps } from 'next'
-import { unstable_getServerSession } from 'next-auth'
 
 type FormItem = {
   username: string,
@@ -14,26 +11,32 @@ type FormItem = {
 function Signup() {
   const toast = useToast()
 
-  const onSubmit = async (obj : FormItem) => {
+  const onSubmit = async (obj : FormItem, setSubmitting: (isSubmitting: boolean) => void) => {
     const req = await fetch("/api/signup", {
       method: "POST",
       body: JSON.stringify(obj)
     })
 
    if (req.status === 200) {
-    toast({
-      position: "bottom-right",
-      title: "Akun dibuat.",
-      description: "Akun kamu telah berhasil di buat!",
-      isClosable: true,
-      duration: 3000,
-      status: "success",
-    })
     signIn("credentials", {
       username: obj.username,
       password: obj.password,
       callbackUrl: process.env.NEXT_PUBLIC_APP_URL!
     })
+   } else {
+    const res: {
+      message: string
+    } = await req.json()
+
+    toast({
+      position: "bottom-right",
+      title: "Error",
+      description: res.message,
+      isClosable: true,
+      duration: 3000,
+      status: "error",
+    })
+    setSubmitting(false)
    }
   }
 
@@ -54,24 +57,6 @@ function Signup() {
       </Center>
     </>
   )
-}
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await unstable_getServerSession(ctx.req, ctx.res, authOptions);
-  
-  if (session) {
-    return {
-      props: {},
-      redirect: {
-        destination: process.env.NEXT_PUBLIC_APP_URL,
-        permanent: false,
-      }
-    }
-  }
-
-  return {
-    props : {}
-  }
 }
 
 export default Signup

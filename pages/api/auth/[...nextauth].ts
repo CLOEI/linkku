@@ -26,14 +26,15 @@ export const authOptions: AuthOptions = {
         const authRef = collection(db, "auth");
         const q = query(authRef, where("username", "==", credentials?.username))
         const querySnapshot = await getDocs(q)
-        const data = querySnapshot.docs[0].data()
+        const data = querySnapshot.docs[0]?.data()
 
-        const check = await bcrypt.compare(credentials!.password, data.password)
-
-        if (check) {
-          return {
-            id: data.id,
-            name: data.username,
+        if (data) {
+          const check = await bcrypt.compare(credentials!.password, data.password)
+          if (check) {
+            return {
+              id: data.id,
+              name: data.username,
+            }
           }
         }
         return null
@@ -56,6 +57,9 @@ export const authOptions: AuthOptions = {
     async redirect({ url }) {
       return url;
     }
+  },
+  pages: {
+    signIn: `${process.env.NEXTAUTH_URL}/signin`
   }
 }
 

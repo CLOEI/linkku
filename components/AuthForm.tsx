@@ -8,7 +8,7 @@ type FormItem = {
 }
 
 type Props = {
-	onSubmit: (obj : FormItem ) => void;
+	onSubmit: (obj : FormItem, setSubmitting : (isSubmitting: boolean) => void ) => void;
 	children: ({ isSubmitting }: { isSubmitting: boolean }) => React.ReactNode;
 };
 
@@ -28,8 +28,8 @@ function AuthForm({ onSubmit, children }: Props) {
         }
 
         return errors;
-      }} onSubmit={(values) => {
-        onSubmit(values)
+      }} onSubmit={(values, { setSubmitting }) => {
+        onSubmit(values, setSubmitting)
       }}>
         {({ isSubmitting, errors, touched }) => (
           <Form>

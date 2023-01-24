@@ -23,12 +23,13 @@ export default async function handler(req : NextApiRequest, res : NextApiRespons
         username : obj.username.toLowerCase(),
         password : await bcrypt.hash(obj.password, 10)
       })
-      res.status(200).json({ message: `Success!, id : ${docRef.id}` })
+      res.status(200).json({ message: `Berhasil!, id : ${docRef.id}` })
     } catch (error) {
-      res.status(400).json({ message: "Bad request!"})
+      console.log(error)
+      res.status(400).json({ message: "Terjadi error"})
     }
   }
   else {
-    res.status(400).json({ message: `Username already registered!` })
+    res.status(400).json({ message: `Nama sudah didaftarkan.` })
   }
 }
