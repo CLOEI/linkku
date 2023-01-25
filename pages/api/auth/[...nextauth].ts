@@ -1,9 +1,9 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
+import bcrypt from "bcrypt"
 import { collection, getDocs, query, where } from "firebase/firestore"
 import { db } from "../../../firebase"
-import bcrypt from "bcrypt"
 
 import type { AuthOptions } from "next-auth"
 
