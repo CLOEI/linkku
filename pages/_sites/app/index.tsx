@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSession } from 'next-auth/react'
-import Head from 'next/head'
 import { Button, Heading, VStack, Stat, StatLabel, StatNumber, Card, CardBody, SimpleGrid} from '@chakra-ui/react'
 import { AiOutlineRight } from "react-icons/ai"
 import { useRouter } from 'next/router'
@@ -29,7 +28,7 @@ function Index() {
           <Card>
             <CardBody>
               <Stat>
-                <StatLabel>Total click</StatLabel>
+                <StatLabel>Total klik</StatLabel>
                 <StatNumber>0</StatNumber>
               </Stat> 
             </CardBody>
@@ -37,7 +36,7 @@ function Index() {
           <Card>
             <CardBody>
               <Stat>
-                <StatLabel>Total view</StatLabel>
+                <StatLabel>Total lihat</StatLabel>
                 <StatNumber>0</StatNumber>
               </Stat> 
             </CardBody>
